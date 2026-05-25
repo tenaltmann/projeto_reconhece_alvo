@@ -1,0 +1,14 @@
+# Ambiente virtual local
+.venv/
+venv/
+
+# Arquivos de cache do Python
+**/__pycache__/
+*.pyc
+
+# Modelos da YOLO (pesos pesados baixados automaticamente)
+*.pt
+**/models/*.pt
+
+# Configurações do editor VS Code
+.vscode/
