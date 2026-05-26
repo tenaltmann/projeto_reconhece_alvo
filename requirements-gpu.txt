@@ -1,0 +1,8 @@
+PyQt5
+mss
+numpy
+opencv-python
+ultralytics
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+torchaudio==2.5.1+cu121
