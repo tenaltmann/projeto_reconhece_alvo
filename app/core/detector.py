@@ -24,7 +24,7 @@ class Detector :
 
                 print(f"Classe: {cls}, Conf: {conf:.2f}")
 
-                if cls == 16 and conf > 0.3:    # Se cls for igual a 16 (código de cachorro) e conf (confiabilidade da detecção) maior que 0.3 (30% de certeza)
+                if cls == 16 and conf > 0.1:    # Se cls for igual a 16 (código de cachorro) e conf (confiabilidade da detecção) maior que 0.3 (30% de certeza)
                     x1, y1, x2, y2 = map(int, box.xyxy[0])  # Armazena as coordenadas da caixa após a detecção
                     boxes.append((x1, y1, x2, y2))  # Adiciona as coordenadas da caixa à lista de boxes
         return boxes
