@@ -2,6 +2,8 @@
 import sys                          # Permite interagir com o sistema (argumentos e saída do programa)
 import os
 from PyQt5 import QtWidgets        # Módulo do PyQt responsável pela interface gráfica
+from dotenv import load_dotenv         # Permite carregar variáveis de ambiente de um arquivo .env
+
 
 
 # ===== IMPORTS DOS MÓDULOS DO PROJETO =====
@@ -12,6 +14,8 @@ from workers.detection_worker import DetectionWorker  # Thread que executa captu
 
 
 def main():
+    load_dotenv()  # Carrega as variáveis de ambiente do arquivo .env
+
     # Inicializa a aplicação PyQt (obrigatório para qualquer interface gráfica)
     app = QtWidgets.QApplication(sys.argv)
 
@@ -59,6 +63,6 @@ def main():
 
 
 # ===== PONTO DE ENTRADA =====
-if __name__ == "__main__":
+if __name__ == "__main__":      
     main()
     # Garante que o código só execute quando o arquivo for rodado diretamente

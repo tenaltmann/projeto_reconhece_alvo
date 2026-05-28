@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui      # Importando as bibliotecas so P
                                                 #   QtWidgets → janelas, botões, interface
                                                 #   QtWidgets → janelas, botões, interface
                                                 #   QtGui → desenho (cores, pincéis, etc)
+from .zone_config import ZoneConfig  # Importa a configuração da zona de interesse
 
 class Overlay(QtWidgets.QWidget):   #   Criando a classe Overlay que herda de QWidget
     def __init__(self, monitor_area=None):   # Método construtor da classe
@@ -30,11 +31,16 @@ class Overlay(QtWidgets.QWidget):   #   Criando a classe Overlay que herda de QW
             self.setGeometry(0, 0, size.width(), size.height())   # Define a geometria da janela para cobrir toda a tela
 
         self.boxes = []   # Lista para armazenar os retângulos desenhados
+        self.zone = ZoneConfig()  # Carrega a configuração da zona de interesse
 
         self.show()    # Exibe a janela
 
     def paintEvent(self, event):   # Método para desenhar os retângulos na janela
         painter = QtGui.QPainter(self)   # Criando um objeto QPainter para desenhar na janela
+        
+        # Desenha a zona de interesse (retângulo fixo) primeiro
+        self.zone.draw_zone(painter)
+        
         pen = QtGui.QPen(QtGui.QColor(0, 255, 0))  # Criando um objeto QPen para definir a cor e a largura da borda dos retângulos
         pen.setWidth(3)    # definindo a largura da borda dos retângulos
         painter.setPen(pen)    # Definindo o pen para o painter

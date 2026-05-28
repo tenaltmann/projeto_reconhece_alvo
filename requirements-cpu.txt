@@ -1,6 +1,7 @@
 --extra-index-url https://pytorch.org
 
 PyQt5
+python-dotenv
 mss
 numpy
 opencv-python
