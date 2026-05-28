@@ -12,3 +12,5 @@ venv/
 
 # Configurações do editor VS Code
 .vscode/
+
+.gitignore 
