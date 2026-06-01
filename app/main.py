@@ -40,7 +40,7 @@ def main():
     # ===== CONEXÃO DOS SINAIS =====
 
     worker.update_boxes.connect(
-        lambda boxes: setattr(overlay, 'boxes', boxes)
+        overlay.set_boxes
     )
     # Sempre que a thread enviar novas caixas:
     # atualiza a lista de boxes do overlay

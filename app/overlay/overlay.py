@@ -47,3 +47,30 @@ class Overlay(QtWidgets.QWidget):   #   Criando a classe Overlay que herda de QW
 
         for (x1, y1, x2, y2) in self.boxes:   # Iterando sobre a lista de retângulos e desenhando cada um deles
             painter.drawRect(x1, y1, x2 - x1, y2 - y1)    # Desenhando um retângulo com as coordenadas fornecidas
+
+    def _rects_intersect(self, a, b):
+        """Retorna True se os retângulos a e b se intersectam.
+
+        Args:
+            a: tupla (x1, y1, x2, y2)
+            b: tupla (x1, y1, x2, y2)
+        """
+        ax1, ay1, ax2, ay2 = a
+        bx1, by1, bx2, by2 = b
+        return not (ax2 < bx1 or ax1 > bx2 or ay2 < by1 or ay1 > by2)
+
+    def set_boxes(self, boxes):
+        """Atualiza as caixas a serem desenhadas e emite mensagem
+        no terminal se alguma delas cruzar a zona configurada."""
+        self.boxes = boxes
+        if not self.zone.has_zone():
+            return
+
+        zone = self.zone.get_zone()
+        if zone is None:
+            return
+
+        for b in boxes:
+            if self._rects_intersect(b, zone):
+                print("ALERTA: detecção cruzou a zona de limite!")
+                break
