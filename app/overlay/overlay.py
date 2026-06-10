@@ -36,6 +36,7 @@ class Overlay(QtWidgets.QWidget):   #   Criando a classe Overlay que herda de QW
         self.zone = ZoneConfig()  # Carrega a configuração da zona de interesse
         self.zona_cruzada = False  # Controla se a zona já foi cruzada no estado atual
         self.tempo_ultima_acao = 0  # Rastreia o tempo da última execução de run_action para implementar intervalo de 15 segundos
+        self.execucoes_por_cruzamento = 0  # Contador de execuções do run_action no cruzamento atual
 
         self.show()    # Exibe a janela
 
@@ -77,14 +78,17 @@ class Overlay(QtWidgets.QWidget):   #   Criando a classe Overlay que herda de QW
         interseção_atual = any(self._rects_intersect(b, zone) for b in boxes)  # Verificando se algum dos retângulos fornecidos cruza a zona de interesse, usando o método _rects_intersect para verificar a interseção entre cada retângulo e a zona
         tempo_atual = time.time()  # Obtém o tempo atual em segundos desde a época Unix
 
-        if interseção_atual and not self.zona_cruzada:                             # Se algum retângulo cruza a zona de interesse e a zona ainda não foi marcada como cruzada, emite um alerta e executa a ação definida
+        if interseção_atual and not self.zona_cruzada:                             # Primeira detecção ao cruzar a zona
             print("ALERTA: detecção cruzou a zona de limite!")                      # Imprime uma mensagem de alerta no terminal indicando que a zona de interesse foi cruzada
             run_action()  # Executa a ação definida quando a zona for cruzada
             self.tempo_ultima_acao = tempo_atual  # Atualiza o tempo da última execução
             self.zona_cruzada = True                    # Marca a zona como cruzada para evitar múltiplos alertas enquanto a zona estiver sendo cruzada
-        elif interseção_atual and self.zona_cruzada and tempo_atual - self.tempo_ultima_acao >= 15:  # Se continua na zona e passaram 15 segundos
+            self.execucoes_por_cruzamento = 1            # Conta a execução inicial
+        elif interseção_atual and self.zona_cruzada and tempo_atual - self.tempo_ultima_acao >= 15 and self.execucoes_por_cruzamento < 3:  # Enquanto permanece na zona e ainda não atingiu 3 execuções
             print("ALERTA: detecção continua na zona de limite!")                   # Imprime uma mensagem de alerta no terminal
             run_action()  # Executa a ação novamente após 15 segundos
             self.tempo_ultima_acao = tempo_atual  # Atualiza o tempo da última execução
-        elif not interseção_atual and self.zona_cruzada:                      # Se nenhum retângulo cruza a zona de interesse e a zona estava marcada como cruzada, reseta o estado para permitir futuros alertas                  
+            self.execucoes_por_cruzamento += 1     # Incrementa contador por cruzamento
+        elif not interseção_atual and self.zona_cruzada:                      # Ao sair da zona
             self.zona_cruzada = False                   # Reseta o estado de cruzamento da zona para permitir futuros alertas quando a zona for cruzada novamente
+            self.execucoes_por_cruzamento = 0          # Reseta o contador para o próximo cruzamento
